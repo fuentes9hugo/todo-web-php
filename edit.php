@@ -33,7 +33,7 @@ require "database.php";
         ":phone_number" => $_POST["phone_number"],
       ]);
 
-      header("Location: index.php");
+      header("Location: home.php");
     }
   }
 ?>
@@ -82,3 +82,4 @@ require "database.php";
   </div>
 
 <?php require "partials/footer.php" ?>
+home.php
