@@ -1,35 +1,37 @@
 <?php
 
-require "database.php";
+  require "database.php";
 
-session_start();
+  session_start();
 
-if (!isset($_SESSION["user"])) {
-  header("Location: login.php");
-  return;
-}
+  // If not logged in, redirected to login page
+  if (!isset($_SESSION["user"])) {
+    header("Location: login.php");
+    return;
+  }
 
-$id = $_GET["id"];
+  $id = $_GET["id"];
 
-$statement = $conn->prepare("SELECT * FROM contacts WHERE id = :id");
-$statement->execute([":id" => $id]);
+  $statement = $conn->prepare("SELECT * FROM contacts WHERE id = :id LIMIT 1");
+  $statement->execute([":id" => $id]);
 
-if ($statement->rowCount() == 0) {
-  http_response_code(404);
-  echo("HTTP 404 NOT FOUND");
-  return;
-}
+  if ($statement->rowCount() == 0) {
+    http_response_code(404);
+    echo("HTTP 404 NOT FOUND");
+    return;
+  }
 
-// Not allow to delete other users contacts
+  // Not allow to delete other users contacts
+  $contact = $statement->fetch(PDO::FETCH_ASSOC); // Returns the next row of the query
 
-$contact = $statement->fetch(PDO::FETCH_ASSOC);
+  if ($contact["user_id"] != $_SESSION["user"]["id"]) {
+    http_response_code(403);
+    echo("HTTP 403 UNAUTHORIZED");
+    return;
+  }
 
-if ($contact["user_id"] !== $_SESSION["user"]["id"]) {
-  http_response_code(403);
-  echo("HTTP 403 UNAUTHORIZED");
-  return;
-}
+  $conn->prepare("DELETE FROM contacts WHERE id = :id")->execute([":id" => $id]);
 
-$conn->prepare("DELETE FROM contacts WHERE id = :id")->execute([":id" => $id]);
+  $_SESSION["flash"] = ["message" => "Contact {$contact['name']} deleted."]; // Set a flash message for the user
 
-header("Location: home.php" );
+  header("Location: home.php" );

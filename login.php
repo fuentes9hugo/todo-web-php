@@ -17,14 +17,14 @@
       if ($statement->rowCount() == 0) {
         $error = "Invalid credentials.";
       } else {
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        $user = $statement->fetch(PDO::FETCH_ASSOC); // Returns the next row of the query
 
         if (!password_verify($_POST["password"], $user["password"])) {
           $error = "Invalid credentials.";
         } else {
           session_start();
 
-          unset($user["password"]);
+          unset($user["password"]); // Deletes 'password' from variable: user
           
           $_SESSION["user"] = $user;
           

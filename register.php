@@ -22,13 +22,13 @@
           ->execute([
             ":name" => $_POST["name"],
             ":email" => $_POST["email"],
-            ":password" => password_hash($_POST["password"], PASSWORD_BCRYPT)
+            ":password" => password_hash($_POST["password"], PASSWORD_BCRYPT),
           ]);
 
           $statement = $conn->prepare("SELECT * FROM users WHERE email = :email LIMIT 1");
           $statement->bindParam(":email", $_POST["email"]);
           $statement->execute();
-          $user = $statement->fetch(PDO::FETCH_ASSOC);
+          $user = $statement->fetch(PDO::FETCH_ASSOC); // Returns the next row of the query
 
           session_start();
           $_SESSION["user"] = $user;

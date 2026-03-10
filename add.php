@@ -4,6 +4,7 @@
 
   session_start();
 
+  // If not logged in, redirected to login page
   if (!isset($_SESSION["user"])) {
     header("Location: login.php");
     return;
@@ -26,7 +27,10 @@
       $statement->bindParam(":phone_number", $_POST["phone_number"]);
       $statement->execute();
 
+      $_SESSION["flash"] = ["message" => "Contact {$_POST['name']} added."]; // Set a flash message for the user
+
       header("Location: home.php");
+      return;
     }
   }
 ?>
