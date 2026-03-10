@@ -2,40 +2,42 @@
 
 require "database.php";
 
-  $id = $_GET["id"];
+session_start();
 
-  $statement = $conn->prepare("SELECT * FROM contacts WHERE id = :id LIMIT 1");
-  $statement->execute([":id" => $id]);
+$id = $_GET["id"];
 
-  if ($statement->rowCount() == 0) {
-    http_response_code(404);
-    echo("HTTP 404 NOT FOUND");
-    return;
+$statement = $conn->prepare("SELECT * FROM contacts WHERE id = :id LIMIT 1");
+$statement->execute([":id" => $id]);
+
+if ($statement->rowCount() == 0) {
+  http_response_code(404);
+  echo("HTTP 404 NOT FOUND");
+  return;
+}
+
+$contact = $statement->fetch(PDO::FETCH_ASSOC);
+
+$error = null;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (empty($_POST["name"]) || empty($_POST["phone_number"])) {
+    $error = "Please fill all the fields.";
+  } else if (strlen($_POST["phone_number"]) < 9) {
+    $error = "Phone number must be at least 9 characters.";
+  } else {
+    $name = $_POST["name"];
+    $phoneNumber = $_POST["phone_number"];
+
+    $statement = $conn->prepare("UPDATE contacts SET name = :name, phone_number = :phone_number WHERE id = :id");
+    $statement->execute([
+      ":id" => $id,
+      ":name" => $_POST["name"],
+      ":phone_number" => $_POST["phone_number"],
+    ]);
+
+    header("Location: home.php");
   }
-
-  $contact = $statement->fetch(PDO::FETCH_ASSOC);
-
-  $error = null;
-
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty($_POST["name"]) || empty($_POST["phone_number"])) {
-      $error = "Please fill all the fields.";
-    } else if (strlen($_POST["phone_number"]) < 9) {
-      $error = "Phone number must be at least 9 characters.";
-    } else {
-      $name = $_POST["name"];
-      $phoneNumber = $_POST["phone_number"];
-
-      $statement = $conn->prepare("UPDATE contacts SET name = :name, phone_number = :phone_number WHERE id = :id");
-      $statement->execute([
-        ":id" => $id,
-        ":name" => $_POST["name"],
-        ":phone_number" => $_POST["phone_number"],
-      ]);
-
-      header("Location: home.php");
-    }
-  }
+}
 ?>
 
 
