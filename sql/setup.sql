@@ -19,3 +19,11 @@ CREATE TABLE contacts (
 
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE addresses(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    address_name VARCHAR(255),
+    contact_id INT NOT NULL,
+
+    FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE
+);  --'Cascade' to be able to delete a contact which has addresses
