@@ -17,8 +17,8 @@ CREATE TABLE contacts (
     user_id INT NOT NULL,
     phone_number VARCHAR(255),
 
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);  --'Cascade' to be able to delete a contact which has addresses
 
 CREATE TABLE addresses(
     id INT AUTO_INCREMENT PRIMARY KEY,

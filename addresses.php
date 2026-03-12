@@ -10,15 +10,15 @@
     return;
   }
 
+  $id = $_GET["id"];
+
   // If it's not a user's contact, deny access
-  $statement = $conn->prepare("SELECT * FROM contacts WHERE user_id = :id");
-  $statement->execute([":id" => $_SESSION["user"]["id"]]);
+  $statement = $conn->prepare("SELECT * FROM contacts WHERE id = :id LIMIT 1");
+  $statement->execute([":id" => $id]);
 
-  $contacts = $statement->fetchAll();
+  $contact = $statement->fetch(PDO::FETCH_ASSOC);
 
-  $contactIds = array_column($contacts, "id");
-
-  if (!in_array((int)$_GET["id"], $contactIds)) {
+  if ($_SESSION["user"]["id"] != $contact["user_id"]) {
     http_response_code(403);
     echo("HTTP 403 UNAUTHORIZED");
     return;
@@ -26,7 +26,7 @@
 
   // Get all contact's addresses
   $statement = $conn->prepare("SELECT * FROM addresses WHERE contact_id = :id");
-  $statement->execute([":id" => $_GET["id"]]);
+  $statement->execute([":id" => $id]);
 
   $addresses = $statement->fetchAll();
 
@@ -50,8 +50,8 @@
           <div class="card text-center">
             <div class="card-body">
               <h3 class="card-title text-capitalize"><?=$address["address_name"] ?></h3>
-              <a href="edit.php?id=<?= $address["id"] ?>" class="btn btn-secondary mb-2">Edit Address</a>
-              <a href="delete.php?id=<?= $address["id"] ?>" class="btn btn-danger mb-2">Delete Address</a>
+              <a href="editAddress.php?id=<?= $address["id"] ?>" class="btn btn-secondary mb-2">Edit Address</a>
+              <a href="deleteAddress.php?id=<?= $address["id"] ?>" class="btn btn-danger mb-2">Delete Address</a>
             </div>
           </div>
         </div>
