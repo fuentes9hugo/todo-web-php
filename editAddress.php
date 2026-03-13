@@ -49,7 +49,7 @@
         ":id" => $id
       ]);
 
-      $_SESSION["flash"] = ["message" => "Contact {$_POST['address_name']} updated."]; // Set a flash message for the user
+      $_SESSION["flash"] = ["message" => "Address {$_POST['address_name']} updated."]; // Set a flash message for the user
 
       header("Location: addresses.php?id={$contact['id']}");
       return;
