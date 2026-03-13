@@ -40,7 +40,10 @@
                 <a href="edit.php?id=<?= $contact["id"] ?>" class="btn btn-secondary mb-2">Edit Contact</a>
                 <a href="delete.php?id=<?= $contact["id"] ?>" class="btn btn-danger mb-2">Delete Contact</a>
               </div>
-              <a href="addresses.php?id=<?= $contact["id"] ?>" class="btn btn-primary mb-2">View Addresses</a>
+              <div>
+                <a href="addresses.php?id=<?= $contact["id"] ?>" class="btn btn-primary mb-2">View Addresses</a>
+                <a href="newAddress.php?id=<?= $contact["id"] ?>" class="btn btn-warning mb-2">Add Address</a>
+              </div>
             </div>
           </div>
         </div>
