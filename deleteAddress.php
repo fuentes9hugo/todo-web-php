@@ -35,7 +35,7 @@
     return;
   }
 
-  $conn->prepare("DELETE * FROM addresses WHERE id = :id")->execute([":id" => $id]);
+  $conn->prepare("DELETE FROM addresses WHERE id = :id")->execute([":id" => $id]);
 
   $_SESSION["flash"] = ["message" => "Address {$address['address_name']} deleted."]; // Set a flash message for the user
 
