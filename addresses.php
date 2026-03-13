@@ -41,7 +41,7 @@
         <div class="col-md-4 mx-auto">
           <div class="card card-body text-center">
             <p>No addresses saved for this contact</p>
-            <a href="newAddress.php?id=<?= $id ?>">Add One!</a>
+            <a href="newAddress.php?id=<?= $contact["id"] ?>">Add One!</a>
           </div>
         </div>
       <?php endif ?>
