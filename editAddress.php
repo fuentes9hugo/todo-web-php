@@ -28,6 +28,7 @@
 
   $contact = $statement->fetch(PDO::FETCH_ASSOC);
 
+  // Cannot edit addresses belonging to other user's contacts
   if ($_SESSION["user"]["id"] != $contact["user_id"]) {
     http_response_code(403);
     echo("HTTP 403 UNAUTHORIZED");
