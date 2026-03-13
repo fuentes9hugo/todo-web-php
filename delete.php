@@ -21,9 +21,9 @@
     return;
   }
 
-  // Not allow to delete other users contacts
   $contact = $statement->fetch(PDO::FETCH_ASSOC); // Returns the next row of the query
-
+  
+  // Not allow to delete other users contacts
   if ($contact["user_id"] != $_SESSION["user"]["id"]) {
     http_response_code(403);
     echo("HTTP 403 UNAUTHORIZED");
